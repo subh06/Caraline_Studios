@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caraline - Creative Digital Agency</title>
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIvPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo=" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracotta: #A63D40;
+            --coral: #FF9E85;
+            --forest: #273C2C;
+            --lime: #B4DC7F;
+            --cream: #E4E3D3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--forest);
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--terracotta);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, border-color 0.2s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--coral);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .cursor.hover {
+            transform: scale(1.5);
+            border-color: var(--lime);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, var(--cream) 0%, transparent 100%);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--forest);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--terracotta);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--terracotta);
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--lime);
+            bottom: 20%;
+            right: -5%;
+            animation-delay: 3s;
+        }
+
+        .shape-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--coral);
+            top: 50%;
+            right: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.1;
+            }
+            50% {
+                transform: translate(30px, -30px) scale(1.2);
+                opacity: 0.15;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1200px;
+        }
+
+        .hero-title {
+            font-weight: 900;
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            color: var(--forest);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero-title .highlight {
+            color: var(--terracotta);
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            font-weight: 300;
+            color: var(--forest);
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--terracotta);
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--forest);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        /* Page Container */
+        .page-container {
+            display: none;
+        }
+
+        .page-container.active {
+            display: block;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .section-title {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            text-align: center;
+            margin-bottom: 5rem;
+            color: var(--forest);
+            letter-spacing: -0.02em;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--terracotta);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-card:nth-child(1)::before { background: var(--terracotta); }
+        .service-card:nth-child(2)::before { background: var(--coral); }
+        .service-card:nth-child(3)::before { background: var(--forest); }
+        .service-card:nth-child(4)::before { background: var(--lime); }
+        .service-card:nth-child(5)::before { background: var(--terracotta); }
+        .service-card:nth-child(6)::before { background: var(--coral); }
+        .service-card:nth-child(7)::before { background: var(--forest); }
+        .service-card:nth-child(8)::before { background: var(--lime); }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .service-card:nth-child(1) .service-icon { background: rgba(166, 61, 64, 0.1); }
+        .service-card:nth-child(2) .service-icon { background: rgba(255, 158, 133, 0.1); }
+        .service-card:nth-child(3) .service-icon { background: rgba(39, 60, 44, 0.1); }
+        .service-card:nth-child(4) .service-icon { background: rgba(180, 220, 127, 0.1); }
+        .service-card:nth-child(5) .service-icon { background: rgba(166, 61, 64, 0.1); }
+        .service-card:nth-child(6) .service-icon { background: rgba(255, 158, 133, 0.1); }
+        .service-card:nth-child(7) .service-icon { background: rgba(39, 60, 44, 0.1); }
+        .service-card:nth-child(8) .service-icon { background: rgba(180, 220, 127, 0.1); }
+
+        .service-title {
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--forest);
+        }
+
+        .service-description {
+            color: var(--forest);
+            opacity: 0.7;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 8rem 4rem;
+            background: white;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            color: var(--forest);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--forest);
+            opacity: 0.8;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--cream);
+            border-radius: 15px;
+        }
+
+        .stat-number {
+            font-weight: 900;
+            font-size: 3rem;
+            color: var(--terracotta);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: var(--forest);
+        }
+
+        .about-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            border-radius: 20px;
+        }
+
+        /* Contact Form Section */
+        .contact-form-section {
+            padding: 8rem 4rem;
+            background: var(--cream);
+        }
+
+        .contact-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 4rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form-container h2 {
+            font-weight: 900;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            color: var(--forest);
+            text-align: center;
+        }
+
+        .contact-form-container .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--forest);
+            opacity: 0.7;
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--forest);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--cream);
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: var(--cream);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--terracotta);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--terracotta);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--forest);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .submit-btn:hover::before {
+            left: 0;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 8rem 4rem;
+            background: var(--forest);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--lime);
+            opacity: 0.05;
+            border-radius: 50%;
+            top: -300px;
+            right: -300px;
+        }
+
+        .process-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-title {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 4rem;
+            color: var(--cream);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 4rem;
+        }
+
+        .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: 900;
+            font-size: 3rem;
+            color: var(--lime);
+            opacity: 0.3;
+        }
+
+        .step-title {
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--lime);
+        }
+
+        .step-description {
+            color: var(--cream);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 8rem 4rem;
+            background: var(--coral);
+            text-align: center;
+        }
+
+        .contact-title {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 2rem;
+            color: var(--forest);
+        }
+
+        .contact-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            color: var(--forest);
+            opacity: 0.8;
+        }
+
+        .contact-button {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            background: var(--forest);
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--terracotta);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .contact-button:hover::before {
+            left: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--forest);
+            color: var(--cream);
+            padding: 3rem 4rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: var(--lime);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--terracotta), var(--lime));
+            z-index: 10000;
+            transition: width 0.1s ease;
+        }
+
+        /* Chatbot */
+        .chatbot-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--terracotta);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(166, 61, 64, 0.4);
+            z-index: 999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(166, 61, 64, 0.6);
+        }
+
+        .chatbot-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+            z-index: 998;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-window.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: var(--terracotta);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: var(--cream);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.bot {
+            align-items: flex-start;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .message.bot .message-bubble {
+            background: white;
+            color: var(--forest);
+        }
+
+        .message.user .message-bubble {
+            background: var(--terracotta);
+            color: white;
+        }
+
+        .chatbot-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid var(--cream);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--cream);
+            border-radius: 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .chatbot-input:focus {
+            outline: none;
+            border-color: var(--terracotta);
+        }
+
+        .send-message {
+            background: var(--terracotta);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero, .services, .process, .contact, .about-section, .contact-form-section {
+                padding: 4rem 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .chatbot-window {
+                width: calc(100vw - 40px);
+                right: 20px;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .animate-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .animate-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-container">
+            <img src="D:\Caraline Website\CARALINE LOGO_GREEN.png" alt="Caraline Logo" class="logo-img" id="logoImg">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+            <li><a href="#services" class="nav-link" data-page="services">Services</a></li>
+            <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+            <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div class="page-container active" id="home-page">
+        <section class="hero">
+            <div class="hero-bg">
+                <div class="hero-shape shape-1"></div>
+                <div class="hero-shape shape-2"></div>
+                <div class="hero-shape shape-3"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    We Create
+                    <span class="highlight">Digital Excellence</span>
+                </h1>
+                <p class="hero-subtitle">Transforming ideas into stunning visual experiences through design, motion, and technology</p>
+                <a href="#services" class="cta-button nav-link" data-page="services">Explore Our Work</a>
+            </div>
+        </section>
+
+        <section class="process">
+            <div class="process-content">
+                <h2 class="process-title animate-in">Our Process</h2>
+                <div class="process-steps">
+                    <div class="step animate-in">
+                        <div class="step-number">01</div>
+                        <h3 class="step-title">Discovery</h3>
+                        <p class="step-description">We dive deep into your brand, goals, and audience to understand what makes you unique.</p>
+                    </div>
+                    <div class="step animate-in">
+                        <div class="step-number">02</div>
+                        <h3 class="step-title">Strategy</h3>
+                        <p class="step-description">We develop a creative strategy that aligns with your objectives and resonates with your audience.</p>
+                    </div>
+                    <div class="step animate-in">
+                        <div class="step-number">03</div>
+                        <h3 class="step-title">Creation</h3>
+                        <p class="step-description">Our team brings ideas to life with meticulous attention to detail and creative excellence.</p>
+                    </div>
+                    <div class="step animate-in">
+                        <div class="step-number">04</div>
+                        <h3 class="step-title">Delivery</h3>
+                        <p class="step-description">We deliver polished, production-ready assets that exceed expectations and drive results.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Services Page -->
+    <div class="page-container" id="services-page">
+        <section class="services" style="padding-top: 10rem;">
+            <h2 class="section-title animate-in">What We Do</h2>
+            <div class="services-grid">
+                <div class="service-card animate-in">
+                    <div class="service-icon">🎬</div>
+                    <h3 class="service-title">Video Editing</h3>
+                    <p class="service-description">Professional video editing that brings your stories to life with cinematic precision and creative flair.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">📱</div>
+                    <h3 class="service-title">Social Media Design</h3>
+                    <p class="service-description">Eye-catching social content that stops the scroll and engages your audience across all platforms.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">✨</div>
+                    <h3 class="service-title">Creative Design</h3>
+                    <p class="service-description">Bold, innovative designs that capture attention and communicate your message with impact.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">🎨</div>
+                    <h3 class="service-title">Brand Guidelines</h3>
+                    <p class="service-description">Comprehensive brand identity systems that ensure consistency and strengthen your market presence.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">🎭</div>
+                    <h3 class="service-title">Motion Graphics</h3>
+                    <p class="service-description">Dynamic motion design that adds energy and sophistication to your visual storytelling.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">🎞️</div>
+                    <h3 class="service-title">2D Animation</h3>
+                    <p class="service-description">Captivating 2D animations that explain complex ideas and entertain your audience.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">💻</div>
+                    <h3 class="service-title">Web Development</h3>
+                    <p class="service-description">Fast, responsive websites built with modern technologies that deliver exceptional user experiences.</p>
+                </div>
+                <div class="service-card animate-in">
+                    <div class="service-icon">🔮</div>
+                    <h3 class="service-title">UI/UX Design</h3>
+                    <p class="service-description">Intuitive interfaces and seamless user experiences that delight users and drive results.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact">
+            <h2 class="contact-title animate-in">Let's Create Together</h2>
+            <p class="contact-subtitle animate-in">Ready to bring your vision to life? Get in touch with us today.</p>
+            <a href="#contact" class="contact-button animate-in nav-link" data-page="contact">Start a Project</a>
+        </section>
+    </div>
+
+    <!-- About Page -->
+    <div class="page-container" id="about-page">
+        <section class="about-section" style="padding-top: 10rem;">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="animate-in">About Caraline</h2>
+                    <p class="animate-in">Founded in 2025, Caraline is a creative digital agency dedicated to transforming bold ideas into stunning visual realities. We believe that exceptional design is more than aesthetics—it's about creating meaningful connections between brands and their audiences.</p>
+                    <p class="animate-in">Our team of passionate designers, developers, and storytellers combines strategic thinking with creative excellence to deliver solutions that don't just look good, but drive real results. From video editing and motion graphics to web development and UI/UX design, we bring expertise across the full spectrum of digital creativity.</p>
+                    <p class="animate-in">At Caraline, we're not just building projects—we're crafting experiences that inspire, engage, and leave lasting impressions.</p>
+                    
+                    <div class="about-stats">
+                        <div class="stat-item animate-in">
+                            <div class="stat-number">2025</div>
+                            <div class="stat-label">Founded</div>
+                        </div>
+                        <div class="stat-item animate-in">
+                            <div class="stat-number">8+</div>
+                            <div class="stat-label">Services</div>
+                        </div>
+                        <div class="stat-item animate-in">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Dedication</div>
+                        </div>
+                        <div class="stat-item animate-in">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">Creativity</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image animate-in">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect fill='%23B4DC7F' width='400' height='400' rx='20'/%3E%3Cpath fill='%23273C2C' opacity='0.1' d='M0 0h400v200L200 400 0 200z'/%3E%3Cpath fill='%23A63D40' opacity='0.2' d='M200 0L400 200v200H200L0 200z'/%3E%3C/svg%3E" alt="Creative Design">
+                </div>
+            </div>
+        </section>
+
+        <section class="process">
+            <div class="process-content">
+                <h2 class="process-title animate-in">Why Choose Us</h2>
+                <div class="process-steps">
+                    <div class="step animate-in">
+                        <div class="step-number">💡</div>
+                        <h3 class="step-title">Innovation First</h3>
+                        <p class="step-description">We stay ahead of trends and technologies to deliver cutting-edge solutions that set you apart.</p>
+                    </div>
+                    <div class="step animate-in">
+                        <div class="step-number">🎯</div>
+                        <h3 class="step-title">Results Driven</h3>
+                        <p class="step-description">Every project is designed with your business goals in mind, ensuring measurable impact.</p>
+                    </div>
+                    <div class="step animate-in">
+                        <div class="step-number">🤝</div>
+                        <h3 class="step-title">Collaborative</h3>
+                        <p class="step-description">We work closely with you throughout the process, ensuring your vision is fully realized.</p>
+                    </div>
+                    <div class="step animate-in">
+                        <div class="step-number">⚡</div>
+                        <h3 class="step-title">Fast Turnaround</h3>
+                        <p class="step-description">We deliver quality work on time, without compromising on creativity or excellence.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div class="page-container" id="contact-page">
+        <section class="contact-form-section" style="padding-top: 10rem;">
+            <div class="contact-form-container">
+                <h2 class="animate-in">Get In Touch</h2>
+                <p class="subtitle animate-in">Let's discuss your project and bring your vision to life</p>
+                
+                <form id="contactForm" class="animate-in">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Service Needed *</label>
+                            <select id="service" name="service" required>
+                                <option value="">Select a service</option>
+                                <option value="video-editing">Video Editing</option>
+                                <option value="social-media">Social Media Design</option>
+                                <option value="creative-design">Creative Design</option>
+                                <option value="brand-guidelines">Brand Guidelines</option>
+                                <option value="motion-graphics">Motion Graphics</option>
+                                <option value="2d-animation">2D Animation</option>
+                                <option value="web-development">Web Development</option>
+                                <option value="ui-ux">UI/UX Design</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Tell us about your project *</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" aria-label="Instagram">Instagram</a>
+                <a href="#" aria-label="Behance">Behance</a>
+                <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                <a href="#" aria-label="Twitter">Twitter</a>
+            </div>
+            <p>&copy; 2025 Caraline. Crafting experiences that inspire.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <button class="chatbot-button" id="chatbotButton">💬</button>
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <h3>Chat with us!</h3>
+            <button class="close-chat" id="closeChat">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="message-bubble">
+                    Hi! 👋 Welcome to Caraline. How can we help you today?
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Type your message...">
+            <button class="send-message" id="sendMessage">➤</button>
+        </div>
+    </div>
+
+    <script>
+        // Load logo
+        const logoImg = document.getElementById('logoImg');
+        const logoPath = 'CARALINE LOGO_GREEN.png';
+        
+        // Try to load from uploads directory
+        fetch('/mnt/user-data/uploads/' + logoPath)
+            .then(response => {
+                if (response.ok) {
+                    logoImg.src = '/mnt/user-data/uploads/' + logoPath;
+                }
+            })
+            .catch(() => {
+                // Fallback to placeholder if image not found
+                console.log('Logo not found, using placeholder');
+            });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
+            cursorFollower.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+        });
+
+        // Cursor hover effect
+        const links = document.querySelectorAll('a, .service-card, button, input, textarea, select');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // Scroll indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollIndicator.style.width = scrollPercent + '%';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Page Navigation
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageName + '-page').classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelectorAll(`[data-page="${pageName}"]`).forEach(link => {
+                link.classList.add('active');
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Re-observe animations
+            document.querySelectorAll('.animate-in').forEach(el => {
+                el.classList.remove('visible');
+                observer.observe(el);
+            });
+        }
+
+        // Navigation click handlers
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                showPage(page);
+            });
+        });
+
+        // Parallax effect on hero shapes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.hero-shape');
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + (index * 0.2);
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Service card 3D effect
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Contact Form
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                service: document.getElementById('service').value,
+                message: document.getElementById('message').value
+            };
+            
+            // Show success message
+            alert('Thank you for contacting us! We will get back to you soon.');
+            
+            // Reset form
+            e.target.reset();
+            
+            console.log('Form submitted:', formData);
+        });
+
+        // Chatbot
+        const chatbotButton = document.getElementById('chatbotButton');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const closeChat = document.getElementById('closeChat');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const sendMessage = document.getElementById('sendMessage');
+
+        chatbotButton.addEventListener('click', () => {
+            chatbotWindow.classList.toggle('active');
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatbotWindow.classList.remove('active');
+        });
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.textContent = message;
+            
+            messageDiv.appendChild(bubble);
+            chatbotMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function getBotResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+                return "Hello! How can I assist you today? I can help you learn about our services, pricing, or answer any questions you have.";
+            } else if (message.includes('service') || message.includes('what do you do')) {
+                return "We offer 8 core services: Video Editing, Social Media Design, Creative Design, Brand Guidelines, Motion Graphics, 2D Animation, Web Development, and UI/UX Design. Which one interests you?";
+            } else if (message.includes('price') || message.includes('cost') || message.includes('how much')) {
+                return "Our pricing varies based on project scope and requirements. I'd love to discuss your specific needs! Would you like to fill out our contact form or schedule a call?";
+            } else if (message.includes('contact') || message.includes('reach') || message.includes('email')) {
+                return "You can reach us through our contact form on the Contact page, or email us at hello@caraline.com. We typically respond within 24 hours!";
+            } else if (message.includes('video')) {
+                return "Our video editing service includes professional editing, color grading, sound design, and motion graphics. We work with all types of content from social media clips to full-length productions.";
+            } else if (message.includes('web') || message.includes('website')) {
+                return "We build modern, responsive websites using the latest technologies. Our web development includes custom designs, CMS integration, e-commerce, and ongoing support.";
+            } else if (message.includes('animation')) {
+                return "We create engaging 2D animations for explainer videos, product demos, educational content, and more. Our animations bring your ideas to life with style and clarity!";
+            } else if (message.includes('brand')) {
+                return "Our brand guideline services include logo design, color palettes, typography systems, brand voice, and comprehensive style guides to ensure consistency across all touchpoints.";
+            } else if (message.includes('thank')) {
+                return "You're very welcome! Is there anything else I can help you with?";
+            } else {
+                return "That's a great question! For detailed information, I recommend checking out our Services or About pages, or feel free to contact us directly. How else can I help you?";
+            }
+        }
+
+        function handleSendMessage() {
+            const message = chatbotInput.value.trim();
+            
+            if (message) {
+                // Add user message
+                addMessage(message, true);
+                
+                // Clear input
+                chatbotInput.value = '';
+                
+                // Simulate bot typing delay
+                setTimeout(() => {
+                    const response = getBotResponse(message);
+                    addMessage(response);
+                }, 500);
+            }
+        }
+
+        sendMessage.addEventListener('click', handleSendMessage);
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
